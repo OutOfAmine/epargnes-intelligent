@@ -1,0 +1,6 @@
+{
+  "name": "jme3 la baghi tjme3",
+  "description": "A smart budgeting and savings application with AI chatbot integration, secure encrypted data, and idle auto-signout.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

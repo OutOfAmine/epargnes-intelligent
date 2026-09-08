@@ -1,0 +1,63 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User's encrypted financial data",
+      "type": "object",
+      "properties": {
+        "salary": { "type": "string" },
+        "urgentAmount": { "type": "string" },
+        "bankBalance": { "type": "string" },
+        "goalsEncrypted": { "type": "string" }
+      }
+    },
+    "Feedback": {
+      "title": "Feedback",
+      "description": "User submitted bugs or ideas",
+      "type": "object",
+      "properties": {
+        "type": { "type": "string", "enum": ["idea", "bug"] },
+        "message": { "type": "string", "maxLength": 1000 },
+        "email": { "type": "string", "maxLength": 100 },
+        "createdAt": { "type": "number" }
+      }
+    },
+    "ErrorLog": {
+      "title": "ErrorLog",
+      "description": "Automatically reported system errors",
+      "type": "object",
+      "properties": {
+        "error": { "type": "string", "maxLength": 2000 },
+        "stack": { "type": "string", "maxLength": 5000 },
+        "userId": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "number" }
+      }
+    },
+    "Stats": {
+      "title": "Stats",
+      "description": "Global application statistics",
+      "type": "object",
+      "properties": {
+        "totalUsers": { "type": "number" }
+      }
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/User" },
+      "description": "Encrypted user profiles"
+    },
+    "/feedback/{feedbackId}": {
+      "schema": { "$ref": "#/entities/Feedback" },
+      "description": "User submitted feedback"
+    },
+    "/errors/{errorId}": {
+      "schema": { "$ref": "#/entities/ErrorLog" },
+      "description": "Auto-reported errors"
+    },
+    "/stats/{statId}": {
+      "schema": { "$ref": "#/entities/Stats" },
+      "description": "Global stats, specifically 'global' document"
+    }
+  }
+}
