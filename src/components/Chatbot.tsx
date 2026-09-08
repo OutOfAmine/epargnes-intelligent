@@ -85,7 +85,7 @@ export default function Chatbot({ uid, lang }: { uid: string, lang: Language }) 
       }
     } catch (e) {
       console.error(e);
-      setMessages(prev => [...prev, { id: Date.now().toString(), role: 'bot', text: "Error. Please try again." }]);
+      setMessages(prev => [...prev, { id: Date.now().toString(), role: 'bot', text: t.errorPleaseTryAgain }]);
     }
     
     setLoading(false);

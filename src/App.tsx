@@ -6,7 +6,7 @@ import Chatbot from './components/Chatbot';
 import Profile from './components/Profile';
 import Onboarding from './components/Onboarding';
 import FeedbackModal from './components/FeedbackModal';
-import { LogOut, Wallet, Moon, Sun, Languages, LayoutDashboard, BarChart3, Loader2, MessageSquare, UserCircle, Github, Linkedin } from 'lucide-react';
+import { LogOut, Wallet, Moon, Sun, Languages, LayoutDashboard, BarChart3, Loader2, MessageSquare, UserCircle, Github, Linkedin, Eye, EyeOff } from 'lucide-react';
 import { Language, translations } from './lib/i18n';
 import { auth, db, doc, getDoc, setDoc, onAuthStateChanged, logout } from './firebase';
 import { increment } from 'firebase/firestore';
@@ -216,6 +216,13 @@ function MainContent({ user, lang, setLang, darkMode, setDarkMode }: { user: Use
               )}
             </div>
             <div className="flex items-center gap-1 sm:gap-2">
+              <button
+                onClick={() => setShowNumbers(!showNumbers)}
+                className={`p-2 rounded-md transition-colors flex items-center justify-center gap-2 text-sm font-medium cursor-pointer ${showNumbers ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300' : 'text-zinc-500 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800'}`}
+                title="Toggle Privacy"
+              >
+                {showNumbers ? <Eye className="w-5 h-5" /> : <EyeOff className="w-5 h-5" />}
+              </button>
               <button 
                 onClick={() => setIsFeedbackOpen(true)}
                 className="text-zinc-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors p-2 rounded-md hover:bg-blue-50 dark:hover:bg-blue-900/20 flex items-center gap-2 text-sm font-medium cursor-pointer"
@@ -285,7 +292,7 @@ function MainContent({ user, lang, setLang, darkMode, setDarkMode }: { user: Use
           <div className="lg:col-span-2">
             {activeTab === 'dashboard' && <Dashboard data={data} lang={lang} showNumbers={showNumbers} setShowNumbers={setShowNumbers} setActiveTab={setActiveTab} />}
             {activeTab === 'stats' && <Stats data={data} lang={lang} showNumbers={showNumbers} />}
-            {activeTab === 'profile' && <Profile data={data} setData={setData} handleSave={handleSave} saving={saving} lang={lang} />}
+            {activeTab === 'profile' && <Profile data={data} setData={setData} handleSave={handleSave} saving={saving} lang={lang} showNumbers={showNumbers} />}
           </div>
           <div className="lg:col-span-1">
             <Chatbot uid={user.uid} lang={lang} />
@@ -293,15 +300,23 @@ function MainContent({ user, lang, setLang, darkMode, setDarkMode }: { user: Use
         </div>
       </main>
 
-      <footer className="mt-auto border-t border-zinc-200 dark:border-zinc-800 py-6 text-center">
-        <div className="flex items-center justify-center gap-4 text-sm text-zinc-500 dark:text-zinc-400">
-          <span className="font-medium">{t.codedBy}</span>
-          <a href="https://github.com/OutOfAmine" target="_blank" rel="noopener noreferrer" className="hover:text-zinc-900 dark:hover:text-white transition-colors">
-            <Github className="w-5 h-5" />
+      <footer className="mt-auto border-t border-zinc-200 dark:border-zinc-800 py-8 text-center bg-white dark:bg-zinc-900">
+        <div className="max-w-3xl mx-auto px-4 flex flex-col items-center gap-4">
+          <a href="https://github.com/OutOfAmine/epargnes-intelligent" target="_blank" rel="noopener noreferrer" className="text-sm font-bold text-zinc-800 dark:text-zinc-200 uppercase tracking-wider hover:text-blue-600 dark:hover:text-blue-400 transition-colors flex items-center justify-center gap-2">
+            {t.remixTitle}
           </a>
-          <a href="https://www.linkedin.com/in/aminejerraryy/" target="_blank" rel="noopener noreferrer" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
-            <Linkedin className="w-5 h-5" />
-          </a>
+          <p className="text-xs text-zinc-500 dark:text-zinc-400">
+            {t.remixDesc}
+          </p>
+          <div className="flex items-center justify-center gap-4 text-sm text-zinc-500 dark:text-zinc-400 mt-2">
+            <span className="font-medium">{t.codedBy}</span>
+            <a href="https://github.com/OutOfAmine" target="_blank" rel="noopener noreferrer" className="hover:text-zinc-900 dark:hover:text-white transition-colors">
+              <Github className="w-5 h-5" />
+            </a>
+            <a href="https://www.linkedin.com/in/aminejerraryy/" target="_blank" rel="noopener noreferrer" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+              <Linkedin className="w-5 h-5" />
+            </a>
+          </div>
         </div>
       </footer>
 

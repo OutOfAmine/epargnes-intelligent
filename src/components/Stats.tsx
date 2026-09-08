@@ -38,7 +38,7 @@ export default function Stats({ data, lang, showNumbers }: { data: DecryptedUser
 
   const savingsDistribution = data.goals.length > 0 
     ? data.goals.map(g => ({ name: g.name, value: g.saved }))
-    : [{ name: 'Unallocated', value: data.bankBalance }];
+    : [{ name: t.unallocated, value: data.bankBalance }];
 
   const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
 
@@ -48,7 +48,7 @@ export default function Stats({ data, lang, showNumbers }: { data: DecryptedUser
       {!showNumbers && (
         <div className="bg-zinc-100 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4 flex items-center justify-center gap-2 text-zinc-500 dark:text-zinc-400 text-sm font-medium">
           <Lock className="w-4 h-4" />
-          Numbers are currently masked for privacy.
+          {t.numbersMasked}
         </div>
       )}
 
@@ -71,7 +71,7 @@ export default function Stats({ data, lang, showNumbers }: { data: DecryptedUser
         </div>
 
         <div className="bg-white dark:bg-zinc-900 p-6 rounded-xl border border-zinc-200 dark:border-zinc-800 shadow-sm transition-colors">
-          <h3 className="text-lg font-semibold mb-6">{t.myGoals} (Distribution)</h3>
+          <h3 className="text-lg font-semibold mb-6">{t.myGoals} {t.distribution}</h3>
           <div className="h-[300px]">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>

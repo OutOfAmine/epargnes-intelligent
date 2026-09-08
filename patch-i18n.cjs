@@ -1,4 +1,6 @@
-export type Language = 'en' | 'fr';
+const fs = require('fs');
+
+const code = `export type Language = 'en' | 'fr';
 
 export const translations = {
   en: {
@@ -158,3 +160,5 @@ export const translations = {
     loginRepoLinkDesc: "Héberge-le chez toi ou fais ta sauce"
   }
 };
+`
+fs.writeFileSync('src/lib/i18n.ts', code);

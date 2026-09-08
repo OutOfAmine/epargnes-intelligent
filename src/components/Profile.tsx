@@ -8,13 +8,15 @@ export default function Profile({
   setData, 
   handleSave, 
   saving, 
-  lang 
+  lang,
+  showNumbers
 }: { 
   data: DecryptedUserData, 
   setData: React.Dispatch<React.SetStateAction<DecryptedUserData>>, 
   handleSave: () => void, 
   saving: boolean, 
-  lang: Language 
+  lang: Language,
+  showNumbers: boolean
 }) {
   const t = translations[lang];
   const [newGoal, setNewGoal] = useState({ name: '', amount: '' });
@@ -62,7 +64,8 @@ export default function Profile({
             <div>
               <label className="block text-sm font-medium text-zinc-600 dark:text-zinc-400 mb-1">{t.monthlySalary}</label>
               <input 
-                type="number" 
+                type={showNumbers ? "number" : "password"}
+                inputMode="numeric"
                 value={data.salary || ''}
                 onChange={(e) => setData({...data, salary: Number(e.target.value) || 0})}
                 className="w-full bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-md p-2.5 text-zinc-800 dark:text-zinc-100 focus:ring-2 focus:ring-blue-500 outline-none"
@@ -71,7 +74,8 @@ export default function Profile({
             <div>
               <label className="block text-sm font-medium text-zinc-600 dark:text-zinc-400 mb-1">{t.urgentExpenses}</label>
               <input 
-                type="number" 
+                type={showNumbers ? "number" : "password"}
+                inputMode="numeric"
                 value={data.urgentAmount || ''}
                 onChange={(e) => setData({...data, urgentAmount: Number(e.target.value) || 0})}
                 className="w-full bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-md p-2.5 text-zinc-800 dark:text-zinc-100 focus:ring-2 focus:ring-blue-500 outline-none"
@@ -80,7 +84,8 @@ export default function Profile({
             <div>
               <label className="block text-sm font-medium text-zinc-600 dark:text-zinc-400 mb-1">{t.bankBalance}</label>
               <input 
-                type="number" 
+                type={showNumbers ? "number" : "password"}
+                inputMode="numeric"
                 value={data.bankBalance || ''}
                 onChange={(e) => setData({...data, bankBalance: Number(e.target.value) || 0})}
                 className="w-full bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-md p-2.5 text-zinc-800 dark:text-zinc-100 focus:ring-2 focus:ring-blue-500 outline-none"
@@ -107,7 +112,8 @@ export default function Profile({
               />
               <div className="flex gap-2">
                 <input 
-                  type="number" 
+                  type={showNumbers ? "number" : "password"}
+                  inputMode="numeric"
                   placeholder={t.goalAmount}
                   value={newGoal.amount}
                   onChange={(e) => setNewGoal({...newGoal, amount: e.target.value})}
@@ -132,11 +138,12 @@ export default function Profile({
                 >
                   <Trash2 className="w-4 h-4" />
                 </button>
-                <div className="font-medium text-sm mb-2 pr-8">{goal.name} (DH {goal.amount})</div>
+                <div className="font-medium text-sm mb-2 pr-8">{goal.name} (DH {showNumbers ? goal.amount : '••••••'})</div>
                 <div>
                   <label className="text-xs text-zinc-500 mb-1 block">{t.savedAmount}</label>
                   <input 
-                    type="number" 
+                    type={showNumbers ? "number" : "password"}
+                    inputMode="numeric"
                     value={goal.saved || ''}
                     onChange={(e) => updateGoalSaved(goal.id, Number(e.target.value) || 0)}
                     className="w-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-md p-2 text-sm outline-none"

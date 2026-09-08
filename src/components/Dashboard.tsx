@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Eye, EyeOff, Target, TrendingUp, AlertCircle, Lock, ShieldCheck, AlertTriangle, ArrowRight, HandMetal } from 'lucide-react';
 import { auth, db, doc } from '../firebase';
 import { deleteUser } from 'firebase/auth';
-import { deleteDoc, increment } from 'firebase/firestore';
+import { deleteDoc, increment, setDoc } from 'firebase/firestore';
 import { DecryptedUserData } from '../types';
 import { Language, translations } from '../lib/i18n';
 
@@ -20,7 +20,7 @@ export default function Dashboard({
   setActiveTab: (tab: 'dashboard' | 'stats' | 'profile') => void
 }) {
   const t = translations[lang];
-  const displayName = auth.currentUser?.displayName || 'Savers';
+  const displayName = auth.currentUser?.displayName || t.savers;
 
   const formatValue = (val: number) => showNumbers ? val.toLocaleString() : '••••••';
   const totalSaved = data.goals.reduce((acc, g) => acc + g.saved, 0);
@@ -29,21 +29,23 @@ export default function Dashboard({
   
   const safeToSave = Math.max(0, data.salary - data.urgentAmount);
 
+  const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
+
   const handleDeleteAccount = async () => {
-    if (window.confirm(t.deleteAccountConfirm)) {
-      try {
-        const user = auth.currentUser;
-        if (user) {
-          await deleteDoc(doc(db, 'users', user.uid));
-          await deleteUser(user);
-        }
-      } catch (error: any) {
-        console.error("Error deleting account:", error);
-        if (error.code === 'auth/requires-recent-login') {
-          alert(t.requiresRecentLogin);
-        } else {
-          alert("Error deleting account. Please try again.");
-        }
+    try {
+      const user = auth.currentUser;
+      if (user) {
+        await deleteDoc(doc(db, 'users', user.uid));
+        await setDoc(doc(db, 'stats', 'global'), { totalUsers: increment(-1) }, { merge: true });
+        await deleteUser(user);
+      }
+    } catch (error: any) {
+      console.error("Error deleting account:", error);
+      if (error.code === 'auth/requires-recent-login') {
+        alert(t.requiresRecentLogin);
+        await auth.signOut();
+      } else {
+        alert(t.errorDeletingAccount);
       }
     }
   };
@@ -67,7 +69,7 @@ export default function Dashboard({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold flex items-center gap-2 mb-1">
-            Yoooooo {displayName} <HandMetal className="w-6 h-6 text-yellow-500" />
+            {t.dashboardGreeting} {displayName} <HandMetal className="w-6 h-6 text-yellow-500" />
           </h1>
           <h2 className="text-sm text-zinc-500 dark:text-zinc-400 flex items-center gap-1">
             {t.loginSecure} <Lock className="w-4 h-4 text-green-500" />
@@ -80,18 +82,6 @@ export default function Dashboard({
             className="p-2 px-4 rounded-md transition-colors flex items-center justify-center gap-2 text-sm font-medium bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 hover:bg-zinc-800 dark:hover:bg-zinc-100 cursor-pointer"
           >
             {t.updateNumbersPrompt || "Update Numbers"} <ArrowRight className="w-4 h-4" />
-          </button>
-          
-          <button
-            onClick={() => setShowNumbers(!showNumbers)}
-            className={`p-2 px-4 rounded-md transition-colors flex items-center justify-center gap-2 text-sm font-medium cursor-pointer ${showNumbers ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300' : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300'}`}
-            title="Toggle Privacy"
-          >
-            {showNumbers ? (
-              <><Eye className="w-4 h-4" /> <span className="hidden sm:inline">{t.privacyToggleHide}</span></>
-            ) : (
-              <><EyeOff className="w-4 h-4" /> <span className="hidden sm:inline">{t.privacyToggleShow}</span></>
-            )}
           </button>
         </div>
       </div>
@@ -179,12 +169,34 @@ export default function Dashboard({
               {t.dangerZoneDescription}
             </p>
           </div>
-          <button
-            onClick={handleDeleteAccount}
-            className="px-4 py-2 bg-red-100 dark:bg-red-500/10 hover:bg-red-200 dark:bg-red-500/20 text-red-700 dark:text-red-400 text-sm font-medium rounded-md transition-colors whitespace-nowrap cursor-pointer"
-          >
-            {t.deleteAccount}
-          </button>
+          {isConfirmingDelete ? (
+            <div className="flex flex-col sm:items-end gap-3 w-full sm:w-auto">
+              <p className="text-sm font-bold text-red-600 dark:text-red-400 bg-red-100 dark:bg-red-900/30 p-3 rounded-lg border border-red-200 dark:border-red-900/50 animate-in fade-in slide-in-from-right-4">
+                {t.deleteAccountConfirm}
+              </p>
+              <div className="flex items-center gap-2 self-end">
+                <button
+                  onClick={() => setIsConfirmingDelete(false)}
+                  className="px-4 py-2 bg-zinc-200 dark:bg-zinc-800 hover:bg-zinc-300 dark:hover:bg-zinc-700 text-zinc-800 dark:text-zinc-200 text-sm font-medium rounded-md transition-colors whitespace-nowrap cursor-pointer"
+                >
+                  Nah, I'm staying
+                </button>
+                <button
+                  onClick={handleDeleteAccount}
+                  className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-md transition-colors whitespace-nowrap cursor-pointer shadow-sm shadow-red-500/20"
+                >
+                  SEND IT 🚀
+                </button>
+              </div>
+            </div>
+          ) : (
+            <button
+              onClick={() => setIsConfirmingDelete(true)}
+              className="px-4 py-2 bg-red-100 dark:bg-red-500/10 hover:bg-red-200 dark:bg-red-500/20 text-red-700 dark:text-red-400 text-sm font-medium rounded-md transition-colors whitespace-nowrap cursor-pointer"
+            >
+              {t.deleteAccount}
+            </button>
+          )}
         </div>
       </div>
     </div>

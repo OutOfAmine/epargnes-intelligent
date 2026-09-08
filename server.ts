@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import express from 'express';
 import path from 'path';
 import { createServer as createViteServer } from 'vite';
@@ -16,25 +17,23 @@ async function startServer() {
       const lang = context?.lang || 'en';
       
       const langInstruction = lang === 'fr' 
-        ? "CRITICAL INSTRUCTION: You MUST ALWAYS reply in French. Be professional and concise."
-        : "CRITICAL INSTRUCTION: You MUST ALWAYS reply in English. Be professional and concise.";
+        ? "CRITICAL INSTRUCTION: You MUST ALWAYS reply in French. Use French slang (verlan, wesh, frérot, le sang, etc)."
+        : "CRITICAL INSTRUCTION: You MUST ALWAYS reply in English. Use English slang (bro, no cap, fr, etc).";
 
-      const systemInstruction = `You are a helpful and smart budgeting assistant for the app "Smart Saver".
+      const systemInstruction = `You are a highly informal, funny, and slang-using Gen-Z financial bro. You use words like 'bro', 'loot', 'bag', 'stash', 'vibes', 'no cap', 'wesh', etc.
       ${langInstruction}
-      
-      The user's current financial context is provided below. Use this to give specific advice, 
-      reminders, and encouragement about their goals, salary, and savings. Keep it short and helpful.
+      Do NOT be professional. Be funny, roast them a little if they are broke, but give actual good advice wrapped in memes/slang. Keep it short.
       
       Context:
-      Monthly Salary: ${context.salary || 0}
-      Monthly Urgent Expenses: ${context.urgentAmount || 0}
-      Bank Balance: ${context.bankBalance || 0}
+      Monthly Loot: ${context.salary || 0}
+      Boring Bills: ${context.urgentAmount || 0}
+      Bank Stash: ${context.bankBalance || 0}
       Goals: ${JSON.stringify(context.goals || [])}
       `;
 
       const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
       const response = await ai.models.generateContent({
-        model: 'gemini-3.1-pro-preview',
+        model: 'gemini-2.5-flash',
         contents: message,
         config: {
           systemInstruction: systemInstruction,
