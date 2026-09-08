@@ -32,37 +32,26 @@ export default function Login({
   }, []);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-zinc-50 dark:bg-zinc-950 p-4 transition-colors duration-300 relative">
-      <div className="absolute top-6 right-6 flex items-center gap-2">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-zinc-50 dark:bg-zinc-950 p-4 transition-colors duration-300 relative py-12">
+      <div className="fixed top-4 right-4 sm:top-6 sm:right-6 z-50 flex items-center gap-2">
         <button 
           onClick={() => setLang(lang === 'fr' ? 'en' : 'fr')}
-          className="p-2 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-500 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-md transition-colors flex items-center gap-2 text-sm font-medium uppercase"
+          className="p-2 sm:p-2.5 bg-white/95 dark:bg-zinc-900/95 backdrop-blur-md border border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-xl shadow-md transition-all flex items-center gap-2 text-xs sm:text-sm font-semibold uppercase cursor-pointer"
+          title="Change Language"
         >
-          <Languages className="w-5 h-5" /> <span className="hidden sm:inline">{lang}</span>
+          <Languages className="w-4 h-4 sm:w-5 sm:h-5 text-blue-500" />
+          <span>{lang}</span>
         </button>
         <button 
           onClick={toggleDarkMode}
-          className="p-2 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-500 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-md transition-colors"
+          className="p-2 sm:p-2.5 bg-white/95 dark:bg-zinc-900/95 backdrop-blur-md border border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-xl shadow-md transition-all flex items-center justify-center cursor-pointer"
+          title={darkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
         >
-          {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+          {darkMode ? <Sun className="w-4 h-4 sm:w-5 sm:h-5 text-amber-500" /> : <Moon className="w-4 h-4 sm:w-5 sm:h-5 text-indigo-400" />}
         </button>
       </div>
       
-      <div className="max-w-md w-full mx-auto mt-8 mb-4 text-center">
-        <a 
-          href="https://github.com/OutOfAmine/epargnes-intelligent" 
-          target="_blank" 
-          rel="noopener noreferrer"
-          className="inline-flex flex-col items-center justify-center space-y-1 text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200 transition-colors group"
-        >
-          <span className="text-sm font-medium flex items-center gap-2">
-            <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current" aria-hidden="true"><path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.161 22 16.416 22 12c0-5.523-4.477-10-10-10z"></path></svg>
-            {t.loginRepoLinkTitle || "Remix it on GitHub"}
-          </span>
-          <span className="text-xs opacity-75">{t.loginRepoLinkDesc || "Run locally or build your own version"}</span>
-        </a>
-      </div>
-      <div className="max-w-md w-full mx-auto bg-white/90 dark:bg-zinc-900/90 backdrop-blur-xl rounded-2xl border border-zinc-200/80 dark:border-zinc-800/80 p-8 text-center shadow-xl shadow-zinc-200/50 dark:shadow-none transition-all duration-300 hover:shadow-2xl">
+      <div className="max-w-md w-full mx-auto bg-white/90 dark:bg-zinc-900/90 backdrop-blur-xl rounded-2xl border border-zinc-200/80 dark:border-zinc-800/80 p-6 sm:p-8 text-center shadow-xl shadow-zinc-200/50 dark:shadow-none transition-all duration-300 hover:shadow-2xl">
         <div className="flex justify-center mb-6">
           <div className="w-16 h-16 bg-blue-50 dark:bg-blue-900/20 rounded-xl flex items-center justify-center">
             <Wallet className="w-8 h-8 text-blue-600 dark:text-blue-400" />
